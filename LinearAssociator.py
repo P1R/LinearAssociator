@@ -26,10 +26,11 @@ try:
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
-L=0
-Matrix=[[]]
 
 class Ui_Form(object):
+    def __init__(self):
+        self.L=0
+        self.Matrix=[[]]
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(808, 306)
@@ -82,7 +83,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.codifica)
-        #QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.slot2)
+        QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), self.decodifica)
         QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL(_fromUtf8("clicked()")), self.textEdit.clear)
         QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL(_fromUtf8("clicked()")), self.textEdit_2.clear)
         QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL(_fromUtf8("clicked()")), self.tableWidget.clear)
@@ -99,19 +100,22 @@ class Ui_Form(object):
     def codifica(self):
 	###se lee texto, se codifica a binario con libreria Str2Bin
 	Message=str(_fromUtf8(self.textEdit.toPlainText()))
-	L = len(Message)
+	self.L = len(Message)
 	BinMessage=s2b.Str2Bin(Message)
+        self.Matrix=BinMessage
 	###se agrega a objeto numpy como arreglo y se aplica transpuesta
 	n = np.array(BinMessage)
 	ns = np.transpose(n)
-	self.tableWidget.setColumnCount(L)
+	self.tableWidget.setColumnCount(self.L)
         self.tableWidget.setRowCount(7)
 	print ns
         for i in range(7):
-            for j in range(L):
+            for j in range(self.L):
                 self.tableWidget.setItem(i,j,QtGui.QTableWidgetItem("%d" % int(ns[i][j])))
-    #def decodifica(self):
-
+    def decodifica(self):
+        print self.L
+        print self.Matrix
+	self.textEdit_2.setText('Hola')
 if __name__ == "__main__":
     import sys;
     app = QtGui.QApplication(sys.argv)
