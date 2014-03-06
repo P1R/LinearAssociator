@@ -9,6 +9,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+import Str2Bin as s2b
+import numpy as np
+
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -23,6 +26,8 @@ try:
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
+L=0
+Matrix=[[]]
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -92,13 +97,21 @@ class Ui_Form(object):
         self.label_2.setText(_translate("Form", "Mensaje Recuperado:", None))
         self.pushButton_2.setText(_translate("Form", "Recuperar", None))
     def codifica(self):
-	self.tableWidget.setColumnCount(5)
-        self.tableWidget.setRowCount(50)
-	self.tableWidget.setItem(0,0,QtGui.QTableWidgetItem("name"))
-        self.tableWidget.setItem(0,1,QtGui.QTableWidgetItem("column_1"))
-        self.tableWidget.setItem(0,2,QtGui.QTableWidgetItem("column_2"))
-        self.tableWidget.setItem(0,3,QtGui.QTableWidgetItem("column_3"))
-        self.tableWidget.setItem(0,4,QtGui.QTableWidgetItem("column_4"))
+	###se lee texto, se codifica a binario con libreria Str2Bin
+	Message=str(_fromUtf8(self.textEdit.toPlainText()))
+	L = len(Message)
+	BinMessage=s2b.Str2Bin(Message)
+	###se agrega a objeto numpy como arreglo y se aplica transpuesta
+	n = np.array(BinMessage)
+	ns = np.transpose(n)
+	self.tableWidget.setColumnCount(L)
+        self.tableWidget.setRowCount(7)
+	print ns
+        for i in range(7):
+            for j in range(L):
+                self.tableWidget.setItem(i,j,QtGui.QTableWidgetItem("%d" % int(ns[i][j])))
+    #def decodifica(self):
+
 if __name__ == "__main__":
     import sys;
     app = QtGui.QApplication(sys.argv)
