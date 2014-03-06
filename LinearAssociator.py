@@ -113,9 +113,11 @@ class Ui_Form(object):
             for j in range(self.L):
                 self.tableWidget.setItem(i,j,QtGui.QTableWidgetItem("%d" % int(ns[i][j])))
     def decodifica(self):
-        print self.L
         print self.Matrix
-	self.textEdit_2.setText('Hola')
+        Message=''
+        for i in range(self.L):
+            Message+=s2b.Bin2Str(self.Matrix[i])
+	self.textEdit_2.setText(Message)
 if __name__ == "__main__":
     import sys;
     app = QtGui.QApplication(sys.argv)
